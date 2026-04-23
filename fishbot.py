@@ -1,7 +1,3 @@
-# fishbot.py
-# Discord Fish Bot
-# Requires: discord.py
-
 import discord
 from discord.ext import commands
 from discord import app_commands
@@ -16,10 +12,6 @@ intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 tree = bot.tree
-
-# -----------------------------
-# Data
-# -----------------------------
 
 FISH_TYPES = [
     "Goldfish",
@@ -53,10 +45,6 @@ LEGENDARY_FISH = [
 
 DATA_FILE = "leaderboard.json"
 
-# -----------------------------
-# Helpers
-# -----------------------------
-
 def load_scores():
     if not os.path.exists(DATA_FILE):
         return {}
@@ -73,18 +61,10 @@ def add_score(user_id):
     data[uid] = data.get(uid, 0) + 1
     save_scores(data)
 
-# -----------------------------
-# Events
-# -----------------------------
-
 @bot.event
 async def on_ready():
     await tree.sync()
     print(f"Logged in as {bot.user}")
-
-# -----------------------------
-# Original Commands
-# -----------------------------
 
 @tree.command(name="fish", description="Shows a fish image")
 async def fish(interaction: discord.Interaction):
@@ -126,10 +106,6 @@ async def pufferfish(interaction: discord.Interaction):
 @tree.command(name="fishhelp", description="Help")
 async def fishhelp(interaction: discord.Interaction):
     await interaction.response.send_message("no help im lazy :)")
-
-# -----------------------------
-# New Commands
-# -----------------------------
 
 @tree.command(name="dailyfish", description="Random fish every day")
 async def dailyfish(interaction: discord.Interaction):
@@ -181,18 +157,10 @@ async def fishleaderboard(interaction: discord.Interaction):
 
     await interaction.response.send_message(msg)
 
-# -----------------------------
-# Track Usage
-# -----------------------------
-
 @bot.event
 async def on_interaction(interaction):
     if interaction.type == discord.InteractionType.application_command:
         add_score(interaction.user.id)
     await bot.process_application_commands(interaction)
-
-# -----------------------------
-# Run Bot
-# -----------------------------
 
 bot.run(TOKEN)
